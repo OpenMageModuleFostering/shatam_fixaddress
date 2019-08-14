@@ -1,0 +1,779 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<script>
+var selectStateShiping="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>";
+ 
+function sdemo(a)
+{
+    // alert('kirti');
+        selectStateShiping=a;
+}    
+    
+    
+var map = {'Arizona': 'AZ', 'Alabama':'AL','Alaska':'AK','Arkansas':'AR','American Samoa':'AS','California':'CA','Colorado':'CO','Connecticut':'CT','Delaware':'DE',
+'District of Columbia':'DC','Florida':'FL','Federated States of Micronesia':'FM','Georgia':'GA','Hawaii':'HI','Guam':'GU','Idaho':'ID','Illinois':'IL','Iowa':'IA',
+'Indiana':'IN','Kansas':'Ks','Kentucky':'KY','Louisiana':'LA','Maine':'ME','Maryland':'MD','Massachusetts':'MA',
+'Marshall Islands':'MH','Michigan':'MI','Minnesota':'MN','Northern Mariana Islands':'MP','Mississippi':'MS','Missouri':'MO','Montana':'MT','North Carolina':'NC',
+'North Dakota':'ND','Nebraska':'NE','New Hampshire':'NH','New Jersey':'NJ','New Mexico':'NM','New York':'NY','Nevada':'NV','Ohio':'OH','Oklahoma':'OK','Oregon':'OR','Pennsylvania':'PA',
+'Puerto Rico':'PR','Palau':'PW','Rhode Island':'RI','South Carolina':'SC','South Dakota':'SD',
+'Tennessee':'TN','Texas':'TX','U.S. Minor Outlying Islands':'UM','Utah':'UT','Virginia':'VA','Virgin Islands':'VI','Vermont':'VT','Washington':'WA','West Virginia':'WV','Wisconsin':'WA','Wyoming':'WY'};
+  function getValue(state)
+  {
+    
+        if (state in map) 
+        {
+           return map[state];
+        } 
+        else 
+        {
+           return 'Not US state!!!!';
+        }
+   }
+
+    
+function get_XmlHttp() {
+
+  var xmlHttp = null;
+
+  if(window.XMLHttpRequest) {		// for Forefox, IE7+, Opera, Safari, ...
+    xmlHttp = new XMLHttpRequest();
+  }
+  else if(window.ActiveXObject) {	// for Internet Explorer 5 or 6
+    xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+  }
+
+  return xmlHttp;
+}
+
+
+
+function chckSpace(val){
+    var pattr=/\s{2,}/g;
+    if(val.match(pattr)){
+        
+       return val.replace(/\s{2,}/g," ");
+    }
+    else{return val;}
+}
+
+
+ function chkcontainOnlyWhitespace(val){
+      var isnum = /^\s+/.test(val);
+      if(isnum==true){
+          
+       return val.replace(/^\s+/,"");}
+ else{return val;} 
+ }        
+
+
+function chkNonWordChar(vall){
+    var pattrs=/[^A-Za-z0-9\s_]{2,}/g;
+     if(vall.match(pattrs)){
+  //   alert("Chacked Input Address!");    
+     var result= vall.replace(/[^A-Za-z0-9\s_]{2,}/g,"");
+    // alert (vall.match(pattrs));
+     return result;
+    }
+    else{return vall;}
+}
+
+function chkZero(vall){
+var patt=/^[^1-9]+\s[0_9a-zA-Z]+/g;
+if(vall.match(patt))
+{
+return true;
+}else{
+    return false;
+}
+
+}
+
+function chkZip(val){
+var pat=/^[^1-9]+/g;
+
+if(val.match(pat))
+{
+return true;
+}else{
+    return false;
+}
+}
+function ifUs(){
+    document.getElementById('shatamK').style.display = "none";
+     var array_resp="";
+             
+        var request =  get_XmlHttp();
+     	var street = document.getElementById('shipping:street1').value;
+        var street2=document.getElementById("shipping:street2").value;
+        var city=document.getElementById('shipping:city').value;
+      
+        var state=selectStateShiping;
+      
+	var zip=document.getElementById('shipping:postcode').value;
+     
+        var abbr=getValue(state); 
+    
+               document.getElementById('qq').style.display = "block";
+   //        alert("Please wait .... address validation is in process.");
+      
+         var  url = 'http://Fixaddress.com/API3/SAC/?address1='+street+"&address2="+street2+"&city="+city+"&state="+abbr+"&zip="+zip;     
+  //       alert(url); 
+         request.open("GET", url, false);			// define the request
+      
+         
+         request.send(null);		// sends data
+       
+       
+         var address = request.responseText;
+ //       alert("kk="+address);
+         if(address!="Internal Server Error Occurred !"){
+     
+         document.getElementById('hiddendividd').style.display = "block";
+   //          alert("kirti");
+         var foo = document.getElementById("hiddendividd"); 
+      
+         var myb = document.createElement('p');
+         foo.appendChild(myb);
+       
+         
+         
+        
+         var oridiv = document.getElementById("origionaladdd");
+        
+         oridiv.appendChild(myb);
+         var lab = document.createElement("label");
+         var element = document.createElement("input");
+         var Oriadd=street+" "+street2+" , "+city+" , "+state+" , "+zip;    
+       
+             element.setAttribute("type", 'radio');
+             element.setAttribute("value",Oriadd);
+             element.setAttribute("name", 'shipradio');
+           
+             lab.appendChild(element);
+             
+             lab.innerHTML +=Oriadd;
+            
+             oridiv.appendChild(lab);
+             oridiv.appendChild(myb);
+         
+         
+         
+         
+     
+         
+      var add=JSON.parse(address);
+         
+      for(var j=0;j<=add.length-1;j++)
+      { 
+          
+         var str = JSON.stringify(add[j]);
+        
+         var newArr = JSON.parse(str);
+      
+         var CorrectZip=shipChangecolor(zip,newArr[9]);
+         var CorrectStreet=shipChangecolor(street,newArr[0]+" "+newArr[1]+" "+newArr[4]+" "+newArr[5]);
+         var CorrectCity=shipChangecolor(city,newArr[7]);
+         var CorrectState=shipChangecolor(newArr[8],newArr[8]);
+         
+         
+         var chkString=CorrectStreet+" , "+CorrectCity+" , "+CorrectState+" , "+CorrectZip;;
+           // alert(array_resp);
+      if(array_resp!==chkString)
+    
+    {
+         
+         array_resp=CorrectStreet+" , "+CorrectCity+" , "+CorrectState+" , "+CorrectZip;
+  
+         
+          var mybr = document.createElement('p');
+          document.body.appendChild(mybr);
+         
+             //Add radio button
+             var label = document.createElement("label");
+             var element = document.createElement("input");
+             
+            //Assign different attributes to the element.
+             element.setAttribute("type", 'radio');
+             element.setAttribute("value",array_resp);
+             element.setAttribute("name", 'shipradio');
+           
+             label.appendChild(element);
+             label.innerHTML += array_resp;
+              var foo = document.getElementById("hiddendividd"); 
+             foo.appendChild(label);
+            
+             foo.appendChild(mybr);
+           
+      }
+      } 
+        var tea =  document.getElementsByName('shipradio');
+         for (i=0;i<tea.length;i++)
+  {
+ 
+   if(i==0)
+   {
+  
+      tea[0].checked = true;
+      shipMyFunction('first');
+    document.getElementById('shipping-new-address-form').style.display = "none"; 
+
+    document.getElementById('listboxaddd').style.display = "none";
+    document.getElementById('qq').style.display = "block";
+    document.getElementById('shipping-buttons-container').style.display = "block";
+    document.getElementById('shipping').style.display = "none";
+   }
+  }
+     
+         
+}else{
+     alert("Sorry!!due to internal server  error address validation  is currently unavailable.");
+  
+    shipping.save();
+    document.getElementById('shipping-buttons-container').style.display = "block";
+    document.getElementById('shipping').style.display = "none";
+    }
+}
+
+
+function shipChangeText2(){
+    var array_resp="";
+             
+        var request =  get_XmlHttp();
+     	var street = document.getElementById('shipping:street1').value;
+        var street2=document.getElementById("shipping:street2").value;
+        var city=document.getElementById('shipping:city').value;
+      
+        var state=selectStateShiping;
+      
+	var zip=document.getElementById('shipping:postcode').value;
+     
+        var abbr=getValue(state); 
+        
+       
+        
+        
+        
+    if(document.getElementById('shipping-new-address-form').style.display=="none"){
+
+     document.getElementById('shipping-buttons-container').style.display = "block";
+     document.getElementById('shipping').style.display = "none";
+        }else{
+          
+          street=  chckSpace(street);
+      street=chkcontainOnlyWhitespace(street);
+      street= chkNonWordChar(street);
+      document.getElementById('shipping:street1').value=street;
+      
+       street2=  chckSpace(street2);
+       street2=chkcontainOnlyWhitespace(street2);
+       street2= chkNonWordChar(street2);
+       document.getElementById("shipping:street2").value = street2;
+       
+       
+       city=  chckSpace(city);
+       city=chkcontainOnlyWhitespace(city);
+       city= chkNonWordChar(city);
+       document.getElementById('shipping:city').value=city;
+       
+        zip=  chckSpace(zip);
+        zip=chkcontainOnlyWhitespace(zip);
+       document.getElementById('shipping:postcode').value=zip;
+          
+          
+          
+          
+          
+          
+    
+       var isnum = /^\d+$/.test(street);
+         if(isnum==true){
+            alert("Enter correct street address.");
+        }else{
+            
+            
+            
+        if(street.length==0){alert("Street address is blank.");}else{   
+        if(street.length<6){alert("Street name is too small.");}else{
+        if(street.length>100){alert("Street name is too large.");}else{   
+        if(chkZero(street)==true){alert("Invalid house number.");}else{    
+        if(city.length==0){alert("City name is blank.");}else{    
+        if(city.length<3){alert("City name is too small.");}else{
+        if(chkZip(zip)==true){alert("Invalid zip.");}else{      
+        if(zip.length==0){alert("Zip is blank.");}else{
+        if(zip.length<5){alert("Zip length is too small.");}else{    
+        if(zip.length>11){alert("Zip length is too large.");}else{    
+            
+           var Pattern = /^\d{2,8}\s+[0-9A-Za-z]+/g;
+           
+          // alert(street.match(Pattern));
+           if (!street.match(Pattern)) {
+              // alert('error');
+                alert("Invalid street address.");
+               return;
+           }
+      else{
+          var adrregex = /\d{2}\s/g;
+          if(!street.match(adrregex)){
+              alert("House number is required in the street address.");
+          }
+          
+          else{
+              var patt=/\d{7}\s*/g;
+               if(street.match(patt)){
+              alert("Invalid street address.");
+          }
+          
+      
+        else{
+        
+        
+ var e = document.getElementById("shipping:country_id");
+          var strUser = e.options[e.selectedIndex].text;    
+           // alert('show');
+      if(strUser=='United States'){
+          
+          document.getElementById('shatamK').style.display = "block";
+ 
+   setTimeout(function(){ifUs()},3000);
+          
+          
+
+}
+
+else{
+ 
+    shipping.save();
+    document.getElementById('shipping-buttons-container').style.display = "block";
+    document.getElementById('shipping').style.display = "none";
+   }
+   
+   
+  }}}}}}}}}}}}}}
+}
+
+  }
+ 
+function shipMyFunction(k)
+{
+ //alert('suc'); 
+var tea =  document.getElementsByName('shipradio');
+//alert(tea.length);
+var txt = "";
+//alert("hello");
+var i;
+ if(document.getElementById('shipping-new-address-form').style.display=="none")
+ {
+      if(document.getElementById('qq').style.display == "block"){
+         shipmyFunction2(tea,k);
+          } 
+         else{
+          //    alert("good!!...");
+              shipping.save(); 
+              document.getElementById('shipping-buttons-container').style.display = "none";
+             
+              document.getElementById('shipping').style.display = "block";
+             }
+ }
+   else
+ {
+     shipmyFunction2(tea,k);
+ 
+ }
+}
+        
+  function shipmyFunction2(tea,k)
+  {
+       var txt = "";
+      //alert("hello");
+       var i;
+      if(tea.length > 0)
+   {
+    
+        if(tea[0].checked)
+     {
+
+           txt = txt + tea[0].value+"";
+           var result=txt.split(",");
+           document.getElementById("shipping:street2").value = ""; 
+           document.getElementById('shipping:city').value=result[1];
+           document.getElementById('shipping:street1').value=result[0];
+            
+           document.getElementById('shipping:postcode').value=result[3];
+         //  alert("hellok");
+           if(k==='sub'){
+             
+           document.getElementById('shipping-buttons-container').style.display = "none";
+           document.getElementById('shipping').style.display = "block";
+            document.getElementById('listboxaddd').style.display = "block";
+            document.getElementById('shipping-new-address-form').style.display = "block";
+            document.getElementById('qq').style.display = "none";
+            var d;
+          //  var coffee =  document.getElementsByName('radio');
+            for (d=0;tea.length!=0;d--)
+            {
+            //coffee[d].remove();
+           // tea[d].parentNode.innerHTML="";
+           tea[d].parentNode.parentNode.removeChild( tea[d].parentNode );
+            d++;
+            }
+            document.getElementById('hiddendividd').style.display="none";
+         //   alert("Your Selected Address Is...\n"+"\nstreet="+result[0]+"\ncity="+result[1]+"\nstate="+result[2]+ "\nzip="+result[3]+"\n");    
+            shipping.save(); 
+            }
+}
+else
+{
+      
+for (i=1;i<=tea.length-1;i++)
+  {     
+     
+          if (tea[i].checked)
+        {
+         var n=tea[i].parentNode.childNodes.length;
+      
+         for (l=0;l<=n-1;l++){
+             
+         txt = txt + tea[i].parentNode.childNodes[l].innerHTML + " ";
+    
+                }
+        
+          var replace=txt.replace(/undefined/gi,",");
+   
+          var result=replace.split(",");
+    
+           document.getElementById("shipping:street2").value = ""; 
+           document.getElementById('shipping:city').value=result[1];
+           document.getElementById('shipping:street1').value=result[0];
+            
+           document.getElementById('shipping:postcode').value=result[3];
+           if(k==='sub'){
+           
+            document.getElementById('shipping-buttons-container').style.display = "none";
+            document.getElementById('shipping').style.display = "block";
+            document.getElementById('listboxaddd').style.display = "block";
+            document.getElementById('shipping-new-address-form').style.display = "block";
+            document.getElementById('qq').style.display = "none";
+            var d;
+     
+            for (d=0;tea.length!=0;d--)
+            {
+          
+            tea[d].parentNode.parentNode.removeChild( tea[d].parentNode );
+            d++;
+            }
+            document.getElementById('hiddendividd').style.display="none";
+   
+            shipping.save();
+                    }
+        }
+      }
+   }
+ }
+
+ else{
+
+   changeText2(); 
+   document.getElementById('shipping-buttons-container').style.display = "none";
+   document.getElementById('shipping').style.display = "block";
+
+   }  
+      
+  }
+  
+
+function shipChangecolor(val1,val2){
+var result;
+var m=val1.indexOf(val2);
+
+         if(m===-1){
+            
+            result=  "<span style='color:#1e7ec8;'>"+val2+"</span>";
+                
+                }
+         else{
+          
+            result=  "<span style='color:#000000;'>"+val2+"</span>";
+          
+            }
+return result;
+}
+
+
+
+
+
+
+ var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+        
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1||keyCode==45);
+     
+if(ret==false){
+             if((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122))
+            {
+            alert("Alphabets are not allowed.");
+            }
+            else
+            {
+                alert("Special charecters  are not allowed.");
+            }
+            } 
+            return ret;
+           
+        }
+        
+        
+        
+        var specialKeys2 = new Array();
+        specialKeys2.push(8); //Backspace
+        specialKeys2.push(9); //Tab
+        specialKeys2.push(46); //Delete
+        specialKeys2.push(36); //Home
+        specialKeys2.push(35); //End
+        specialKeys2.push(37); //Left
+        specialKeys2.push(39); //Right
+        function IsAlphaNumeric(e) {
+            var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+            var ret = ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (specialKeys2.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+            return ret;
+        }
+        
+        
+        
+         var specialKeys23 = new Array();
+        specialKeys23.push(8); //Backspace
+        specialKeys23.push(9); //Tab
+        specialKeys23.push(46); //Delete
+        specialKeys23.push(36); //Home
+        specialKeys23.push(35); //End
+        specialKeys23.push(37); //Left
+        specialKeys23.push(39); //Right
+        function IsAlpha(e) {
+            var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+            var ret = ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (specialKeys23.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+        if(keyCode=='32'||keyCode=='39'||keyCode=='45'||keyCode=='46'){return true;}else{
+            if(ret==false){
+          if(keyCode>='48'&& keyCode<='57')
+                {
+                    alert("Numbers are  not allowed.");
+                }
+                else
+                {
+                             alert("Only  '   -  .  these special charecters  are allowed.");
+                }
+            }
+        return ret;
+        }
+        } 
+        
+        
+        function validateSpecialCharacters(e) 
+{ 
+var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+var spclChars = "!@$%^*()<>\\|}{[]_+=\""; 
+var content = document.getElementById("shipping:street1").value; 
+ 
+if (spclChars.indexOf(String.fromCharCode(keyCode)) != -1) 
+{ 
+alert ("Only  -  .  ,  &  '   #   these special charecters are allowed."); 
+return false; 
+} 
+} 
+
+
+</script>
+
+
+<form action="" id="co-shipping-form">
+    <ul class="form-list">
+    <?php if ($this->customerHasAddresses()): ?>
+       <li class="wide" id="listboxaddd">
+           <label for="shipping-address-select"><?php echo $this->__('Select a shipping address from your address book or enter a new address.') ?></label>
+           <div class="input-box">
+               <?php echo $this->getAddressesHtmlSelect('shipping') ?>
+           </div>
+       </li>
+    <?php endif ?> 
+        <li id="shipping-new-address-form"<?php if ($this->customerHasAddresses()): ?> style="display:none;"<?php endif ?>>
+            <fieldset>
+                <input type="hidden" name="shipping[address_id]" value="<?php echo $this->getAddress()->getId() ?>" id="shipping:address_id" />
+                <ul>
+                    <li class="fields"><?php echo $this->getLayout()->createBlock('customer/widget_name')->setObject($this->getAddress())->setFieldIdFormat('shipping:%s')->setFieldNameFormat('shipping[%s]')->setFieldParams('onchange="shipping.setSameAsBilling(false)"')->toHtml() ?></li>
+                    <li class="fields">
+                        <div class="fields">
+                            <label for="shipping:company"><?php echo $this->__('Company') ?></label>
+                            <div class="input-box">
+                                <input type="text" id="shipping:company" name="shipping[company]" value="<?php echo $this->escapeHtml($this->getAddress()->getCompany()) ?>" title="<?php echo $this->__('Company') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('company') ?>" onchange="shipping.setSameAsBilling(false);" />
+                            </div>
+                        </div>
+                    </li>
+            <?php $_streetValidationClass = $this->helper('customer/address')->getAttributeValidationClass('street'); ?>
+                    <li class="wide">
+                        <label for="shipping:street1" class="required"><em>*</em><?php echo $this->__('Street Address') ?></label>
+                        <div class="input-box">
+                            <input type="text" placeholder="Line 1" title="<?php echo $this->__('Street Address') ?>" name="shipping[street][]" id="shipping:street1" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet(1)) ?>" class="input-text <?php echo $_streetValidationClass ?>" onchange="shipping.setSameAsBilling(false);" onkeypress="return validateSpecialCharacters(event);" ondrop="return false;"
+        onpaste="return false;"/>
+                        </div>
+                    </li>
+            <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
+            <?php for ($_i = 2, $_n = $this->helper('customer/address')->getStreetLines(); $_i <= $_n; $_i++): ?>
+                    <li class="wide">
+                        <div class="input-box">
+                            <input type="text" placeholder="Line 2"  title="<?php echo $this->__('Street Address %s', $_i) ?>" name="shipping[street][]" id="shipping:street<?php echo $_i ?>" value="<?php echo $this->escapeHtml($this->getAddress()->getStreet($_i)) ?>" class="input-text <?php echo $_streetValidationClass ?>" onchange="shipping.setSameAsBilling(false);" onkeypress="return validateSpecialCharacters(event);" ondrop="return false;"
+        onpaste="return false;"/>
+                        </div>
+                    </li>
+            <?php endfor; ?>
+                    <?php if ($this->helper('customer/address')->isVatAttributeVisible()) : ?>
+                    <li class="wide">
+                        <label for="billing:vat_id"><?php echo $this->__('VAT Number'); ?></label>
+                        <div class="input-box">
+                            <input type="text" id="shipping:vat_id" name="shipping[vat_id]" value="<?php echo $this->escapeHtml($this->getAddress()->getVatId()); ?>" title="<?php echo $this->__('VAT Number'); ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('vat_id') ?>" />
+                        </div>
+                    </li>
+                    <?php endif; ?>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="shipping:city" class="required"><em>*</em><?php echo $this->__('City') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('City') ?>" name="shipping[city]" value="<?php echo $this->escapeHtml($this->getAddress()->getCity()) ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('city') ?>" id="shipping:city" onchange="shipping.setSameAsBilling(false);" onkeypress="return IsAlpha(event);" ondrop="return false;"
+        onpaste="return false;"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="shipping:region" class="required"><em>*</em><?php echo $this->__('State/Province') ?></label>
+                            <div class="input-box">
+                                <select id="shipping:region_id" name="shipping[region_id]" onchange="sdemo(this.options[this.selectedIndex].text)" title="<?php echo $this->__('State/Province') ?>" class="validate-select" style="display:none;">
+                                    <option value=""><?php echo $this->__('Please select region, state or province') ?></option>
+                                </select>
+                                <script type="text/javascript">
+                                //<![CDATA[
+                                    $('shipping:region_id').setAttribute('defaultValue',  "<?php echo $this->getAddress()->getRegionId() ?>");
+                                //]]>
+                                </script>
+                                <input type="text" id="shipping:region" name="shipping[region]" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" style="display:none;" />
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="shipping:postcode" class="required"><em>*</em><?php echo $this->__('Zip/Postal Code') ?></label>
+                            <div class="input-box">
+                                <input type="text" title="<?php echo $this->__('Zip/Postal Code') ?>" name="shipping[postcode]" id="shipping:postcode" value="<?php echo $this->escapeHtml($this->getAddress()->getPostcode()) ?>" class="input-text validate-zip-international <?php echo $this->helper('customer/address')->getAttributeValidationClass('postcode') ?>" onchange="shipping.setSameAsBilling(false);" onkeypress="return IsNumeric(event);" ondrop="return false;"
+        onpaste="return false;"/>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="shipping:country_id" class="required"><em>*</em><?php echo $this->__('Country') ?></label>
+                            <div class="input-box">
+                                <?php echo $this->getCountryHtmlSelect('shipping') ?>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="fields">
+                        <div class="field">
+                            <label for="shipping:telephone" class="required"><em>*</em><?php echo $this->__('Telephone') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="shipping[telephone]" value="<?php echo $this->escapeHtml($this->getAddress()->getTelephone()) ?>" title="<?php echo $this->__('Telephone') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('telephone') ?>" id="shipping:telephone" onchange="shipping.setSameAsBilling(false);" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="shipping:fax"><?php echo $this->__('Fax') ?></label>
+                            <div class="input-box">
+                                <input type="text" name="shipping[fax]" value="<?php echo $this->escapeHtml($this->getAddress()->getFax()) ?>" title="<?php echo $this->__('Fax') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('fax') ?>" id="shipping:fax" onchange="shipping.setSameAsBilling(false);" />
+                            </div>
+                        </div>
+                    </li>
+                
+                </ul>
+            </fieldset>
+            <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        </li>
+        
+        
+        
+        
+               <?php if ($this->isCustomerLoggedIn() && $this->customerHasAddresses()):?>
+                    <li class="control" id="qq" style="display: none;">
+                        <input type="checkbox" name="shipping[save_in_address_book]" value="1" title="<?php echo $this->__('Save in address book') ?>" id="shipping:save_in_address_book" onchange="shipping.setSameAsBilling(false);"<?php if ($this->getAddress()->getSaveInAddressBook()):?> checked="checked"<?php endif;?> class="checkbox" /><label for="shipping:save_in_address_book"><?php echo $this->__('Save in address book') ?></label></li>
+                <?php else:?>
+                    <li class="no-display"><input type="hidden" name="shipping[save_in_address_book]" value="1" /></li>
+                <?php endif;?>
+        
+        
+        
+        
+        <li class="control">
+            <input type="checkbox" name="shipping[same_as_billing]" id="shipping:same_as_billing" value="1"<?php if($this->getAddress()->getSameAsBilling()): ?> checked="checked"<?php endif; ?> title="<?php echo $this->__('Use Billing Address') ?>" onclick="shipping.setSameAsBilling(this.checked)" class="checkbox" /><label for="shipping:same_as_billing"><?php echo $this->__('Use Billing Address') ?></label>
+        </li>
+    </ul>
+     <div class="buttons-set" id="shipping">
+       <p class="back-link"><a href="#" onclick="checkout.back(); return false;"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+        <button type="button" class="button" onclick="shipChangeText2()"><span><span><?php echo $this->__('Continue') ?></span></span></button>
+       <div id="shatamK" style="display: none;" >
+        <img    src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Please wait .... address validation is in process...') ?>" title="<?php echo $this->__('Please wait .... address validation is in process') ?>" class="v-middle" /> <?php echo $this->__('Please wait address validation is in process..') ?>  
+        </div>
+    </div>
+      
+        
+   <div class="fieldset" id="hiddendividd" style="display: none;">
+         <h2 class="legend">Correct Addresses</h2>
+     There's a problem with the address provided - we've marked our suggestions  in  below. Please choose which version of the address you want to use, and click  to the address you want to select.
+     <p></p>
+     
+      <div id="origionaladdd">
+           <h4>Address you entered...</h4>
+      </div>
+
+     <h4>Corrected addresses:</h4>
+         
+  </div>
+    
+    <div class="buttons-set" id="shipping-buttons-container"  style="display: none;">
+       
+        <p class="back-link"><a href="#" onclick="checkout.back(); return false;"><small>&laquo; </small><?php echo $this->__('Back') ?></a></p>
+        <button type="button" class="button" title="<?php echo $this->__('Continue') ?>" onclick="shipMyFunction('sub')"><span><span><?php echo $this->__('Click To Continue') ?></span></span></button>
+        <span id="shipping-please-wait" class="please-wait" style="display:none;">
+            <img src="<?php echo $this->getSkinUrl('images/opc-ajax-loader.gif') ?>" alt="<?php echo $this->__('Loading next step...') ?>" title="<?php echo $this->__('Loading next step...') ?>" class="v-middle" /> <?php echo $this->__('Loading next step...') ?>
+        </span>
+    </div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var shipping = new Shipping('co-shipping-form', '<?php echo $this->getUrl('checkout/onepage/getAddress') ?>address/', '<?php echo $this->getUrl('checkout/onepage/saveShipping') ?>',
+        '<?php echo $this->getUrl('checkout/onepage/shippingMethod') ?>');
+    var shippingForm = new VarienForm('co-shipping-form');
+    shippingForm.extraChildParams = ' onchange="shipping.setSameAsBilling(false);"';
+    //shippingForm.setElementsRelation('shipping:country_id', 'shipping:region', '<?php echo $this->getUrl('directory/json/childRegion') ?>', '<?php echo $this->__('Select State/Province...') ?>');
+    $('shipping-address-select') && shipping.newAddress(!$('shipping-address-select').value);
+
+    var shippingRegionUpdater = new RegionUpdater('shipping:country_id', 'shipping:region', 'shipping:region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined, 'shipping:postcode');
+//]]>
+</script>

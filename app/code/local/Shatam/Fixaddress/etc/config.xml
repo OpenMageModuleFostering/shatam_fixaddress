@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<config>
+	<modules>
+		<Shatam_Fixaddress>
+			<version>0.1.0</version> 
+		</Shatam_Fixaddress>
+	</modules>
+        
+     <frontend>
+            
+        <routers>
+            <shatam>	 I make this match my front name but I'm not sure it matters 
+                <use>standard</use>	 Use standard routing as opposed to admin.  IE: frontend vs admin 
+                <args>
+                    <module>Shatam_Fixaddress</module>	 The module to search for controllers 
+                    <frontName>shatam</frontName>	 The first descriminator in the path.  "spinonesolutions" in http://localhost/spinonesolutions/ 
+                </args>
+            </shatam>
+        </routers>
+            
+            <layout>
+                
+               <updates>
+               
+                 <shatam>
+                   
+                    <file>fixaddress.xml</file>
+                    
+                 </shatam>
+             </updates>
+            
+        </layout>
+        
+    </frontend>
+    
+    <blocks>
+
+            <blocks>
+
+                <rewrite>
+
+                    <address_edit>Shatam_Fixaddress_Block_Address_Edit</address_edit>
+                    <onepage_billing>Shatam_Fixaddress_Block_Address_Billing</onepage_billing>
+                    <onepage_shiping>Shatam_Fixaddress_Block_Address_Shiping</onepage_shiping>
+                </rewrite>
+
+            </blocks>
+
+    </blocks>
+
+</config>

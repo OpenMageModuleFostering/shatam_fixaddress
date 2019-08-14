@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+    <name>Shatam_Fixaddress</name>
+    <version>1.0.0</version>
+    <stability>stable</stability>
+    <license uri="http://opensource.org/licenses/osl-3.0.php ">OCL</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>This extension are used for verify billing and shipping addresses specified by customers during the checkout process and My Account Address Book entries also.&#xD;
+</summary>
+    <description>Helps store owners verify billing and shipping addresses specified by customers during the checkout process and My Account Address Book entries also.&#xD;
+Fixaddress will correct minor mistakes and fix critical errors in address,ensure order deliverability and improve customer satisfaction.&#xD;
+</description>
+    <notes>Initial Relese</notes>
+    <authors><author><name>shatam</name><user>shatam</user><email>shatamtech@gmail.com</email></author><author><name>kirti</name><user>misal</user><email>kirti.shatam@gmail.com</email></author></authors>
+    <date>2014-06-11</date>
+    <time>13:34:21</time>
+    <contents><target name="magelocal"><dir><dir name="Shatam"><dir name="Fixaddress"><dir name="Block"><dir name="Address"><file name="Edit.php" hash="6d85f3f45d8a890c62fac0500810f559"/></dir></dir><dir name="etc"><file name="config.xml" hash="485304536b188f8ce5a05e41ac9acb97"/></dir></dir></dir></dir></target><target name="magedesign"><dir><dir name="frontend"><dir name="default"><dir name="default"><dir name="template"><dir name="shatam"><file name="billing.phtml" hash="1bc760dc45ec3939f36287453a9c20fd"/><file name="edit.phtml" hash="8211aeac368cc2c7262b5a32007b71fb"/><file name="shipping.phtml" hash="8c9a152016d549d006df23459defbe88"/></dir></dir><dir name="layout"><file name="fixaddress.xml" hash="60583cdeb49465152787e792ec535ed5"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir><dir name="modules"><file name="Shatam_Fixaddress.xml" hash="dbaf3c26dc455762379d41ca21acd14c"/></dir></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>6.0.0</max></php></required></dependencies>
+</package>

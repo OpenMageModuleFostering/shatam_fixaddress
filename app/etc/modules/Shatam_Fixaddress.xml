@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Shatam_Fixaddress>
+            <active>true</active>
+            <codePool>local</codePool>
+           
+        </Shatam_Fixaddress>
+        
+    </modules>
+</config>
