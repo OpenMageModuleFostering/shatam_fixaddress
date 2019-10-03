@@ -1,17 +1,5 @@
 {
-    "name": "OpenMageModuleFostering/Shatam_Fixaddress",
-    "type": "magento-module",
-    "license": "OCL",
-    "homepage": "",
-    "description": "This extension are used for verify billing and shipping addresses specified by customers during the checkout process and My Account Address Book entries also.
-",
-    "authors": [
-    {
-        "name": "shatam",
-        "email": "shatamtech@gmail.com"
-    }
-],
-    "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+    "keywords": [
+        "openmage-module"
+    ]
 }
